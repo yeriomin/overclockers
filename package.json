@@ -1,0 +1,33 @@
+{
+  "name": "overclockers",
+  "version": "1.0.0",
+  "description": "overclockers.ru results db scraper, RESTful server and alternative ui",
+  "main": "scrape.js",
+  "dependencies": {
+    "cheerio": "^0.18.0",
+    "iconv-lite": "^0.4.5",
+    "ini": "^1.3.2",
+    "sqlite3": "^3.0.4",
+    "yargs": "^1.3.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yeriomin/overclockers"
+  },
+  "keywords": [
+    "overclockers",
+    "scraper",
+    "alternative",
+    "ui"
+  ],
+  "author": "yeriomin@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yeriomin/overclockers/issues"
+  },
+  "homepage": "https://github.com/yeriomin/overclockers"
+}
