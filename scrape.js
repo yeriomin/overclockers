@@ -75,7 +75,7 @@ function initDb(db) {
 function parseOverclockersPage(html) {
     console.log('Initializing db');
     var db = new sqlite3.Database(config.dbFile);
-    initDb(db)
+    initDb(db);
 
     console.log('Converting to utf-8');
     var utf8String = iconv.decode(html, 'win1251');
