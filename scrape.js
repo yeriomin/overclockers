@@ -4,11 +4,14 @@ var fs = require('fs');
 var ini = require('ini');
 var iconv = require('iconv-lite');
 var sqlite3 = require('sqlite3');
-var argv = require('yargs').argv;
+var argv = require('yargs')
+    .usage("Usage: $0 [-file filename] [-resultlimit number]");
 var cheerio = require('cheerio'), $;
 
 var config = ini.parse(fs.readFileSync('./config.ini', 'utf-8'));
 
+console.log(argv.help());
+argv = argv.argv;
 if (argv.file) {
     // Getting file from fs if it exists
     if (fs.existsSync(argv.file)) {
@@ -24,7 +27,15 @@ if (argv.file) {
 } else {
     // Otherwise downloading the whole db
     var http = require('http');
-    console.log('Downloading from ' + config.url);
+    var url = require('url');
+    var resultsUrl = config.url;
+    if (argv.resultlimit && parseInt(argv.resultlimit) > 0) {
+        urlObject = url.parse(resultsUrl, true);
+        urlObject.query.items = parseInt(argv.resultlimit);
+        urlObject.search = null;
+        resultsUrl = url.format(urlObject);
+    }
+    console.log('Downloading from ' + resultsUrl);
     callback = function(response) {
         var len = parseInt(response.headers['content-length'], 10);
         var bytesReceived = 0;
@@ -40,7 +51,7 @@ if (argv.file) {
             parseOverclockersPage(responseText);
         });
     }
-    var req = http.get(config.url, callback);
+    var req = http.get(resultsUrl, callback);
     req.end();
 }
 
