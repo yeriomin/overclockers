@@ -37,12 +37,12 @@ if (argv.file) {
     }
     console.log('Downloading from ' + resultsUrl);
     callback = function(response) {
-        var len = parseInt(response.headers['content-length'], 10);
+        response.setEncoding('binary');
         var bytesReceived = 0;
         var responseText = ''
         response.on('data', function (chunk) {
             bytesReceived += chunk.length;
-            process.stdout.write("\r" + Math.round(bytesReceived / 1048576) + " Mb received");
+            process.stdout.write("\r" + (bytesReceived / 1048576).toFixed(2) + " Mb received");
             responseText += chunk;
         });
         response.on('end', function () {
@@ -89,7 +89,7 @@ function parseOverclockersPage(html) {
     initDb(db);
 
     console.log('Converting to utf-8');
-    var utf8String = iconv.decode(html, 'win1251');
+    var utf8String = iconv.decode(new Buffer(html, 'binary'), 'win1251');
 
     console.log('Parsing');
     $ = cheerio.load(utf8String);
