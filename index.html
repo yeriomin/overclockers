@@ -12,7 +12,7 @@
           <td>
             <table class="table">
               <tr><td>Автор результата</td><td>{{author-name}}{{#if author-mail}} <{{author-mail}}>{{/if}}</td></tr>
-              <tr><td>Дата занесения</td><td>{{date}}</td></tr>
+              <tr><td>Дата занесения</td><td>{{date-string}}</td></tr>
               <tr><td>Ядро процессора</td><td>{{core}}</td></tr>
               {{#if batch}}<tr><td>Маркировка процессора</td><td>{{batch}}</td></tr>{{/if}}
               <tr><td>Штатная частота</td><td>{{reference-frequency}} МГц ({{reference-fsb}} МГц x {{reference-multiplier}})</td></tr>
@@ -171,12 +171,13 @@
           rowCallback: function(row, data) {
             $(row).on('click', function() {
               $('#modalLabel').text('Результат #' + data.id);
-              var dataClone = data;
-              dataClone['date'] = getFormattedDate(data['date']);
-              dataClone['reference-multiplier'] = Math.round(parseFloat(dataClone['reference-frequency']) / parseFloat(dataClone['reference-fsb']))
-              dataClone['oc-difference'] = parseInt(dataClone['oc-frequency']) - parseInt(dataClone['reference-frequency']);
-              dataClone['oc-percent'] = Math.round(dataClone['oc-difference'] / parseInt(dataClone['reference-frequency']) * 100)
-              $('#modalBody').html(template(dataClone));
+              if (!data['date-string']) {
+                data['date-string'] = getFormattedDate(data['date']);
+                data['reference-multiplier'] = Math.round(parseFloat(data['reference-frequency']) / parseFloat(data['reference-fsb']))
+                data['oc-difference'] = parseInt(data['oc-frequency']) - parseInt(data['reference-frequency']);
+                data['oc-percent'] = Math.round(data['oc-difference'] / parseInt(data['reference-frequency']) * 100);
+              }
+              $('#modalBody').html(template(data));
               $('#resultModal').modal('show');
             });
           }
