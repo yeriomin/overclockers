@@ -76,10 +76,17 @@
         return moment(new Date(parseInt(timestamp))).format('DD.MM.YYYY')
       }
       $(document).ready(function() {
+        var parser = document.createElement('a');
+        parser.href = location.href;
+        var apiEndpoint = (
+            parser.protocol == 'file:'
+            ? 'http://localhost'
+            : (parser.protocol + '//' + parser.hostname)
+          ) + ':8080/';
         var source = $("#resultModalTemplate").html();
         var template = Handlebars.compile(source);
         var table = $('#results').dataTable({
-          ajax: 'http://localhost:8080/result',
+          ajax: apiEndpoint + 'result',
           stateSave: true,
           serverSide: true,
           autoWidth: true,
@@ -162,7 +169,7 @@
               .on('change', function () {
                 $('#results').DataTable().column('core:name').search($(this).val()).draw();
               });
-            $.getJSON('http://localhost:8080/core', function(data) {
+            $.getJSON(apiEndpoint + 'core', function(data) {
               $.each(data, function( key, val ) {
                 select.append('<option value="' + val + '">' + val + '</option>');
               });
